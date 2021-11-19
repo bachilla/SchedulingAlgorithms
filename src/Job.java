@@ -1,3 +1,10 @@
+/**
+ * Job class.
+ *
+ * Defines the jobs produced and consumed to/from the BoundedBuffer.
+ *
+ * It's data members are used to calculate statistics after each job is done running.
+ * */
 public class Job {
 
     private String appType;
@@ -9,11 +16,8 @@ public class Job {
     public int schedulerID = 0;
 
     public Job() {
-        schedulerID++;
-        creationTime = System.currentTimeMillis();
+        ++this.schedulerID;
+        this.creationTime = System.currentTimeMillis();
     }
-
-
-
 
 }

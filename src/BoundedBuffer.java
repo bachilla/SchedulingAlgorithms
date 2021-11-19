@@ -1,5 +1,4 @@
 //package Semaphores.boundedbuffer;
-
 import java.util.concurrent.Semaphore;
 
 /**
@@ -37,17 +36,13 @@ public class BoundedBuffer implements Buffer {
             empty.acquire();
             mutex.acquire();
         } catch (Exception e) {
-            System.out.println("Error adding Job to server buffer...");
             e.printStackTrace();
         }
         // add an item to the buffer
         ++count;
         buffer[in] = item;
         in = (in + 1) % BUFFER_SIZE;
-
-        if (count == BUFFER_SIZE) {
-        } else {
-        }
+        System.out.println("Added job to buffer... current buffer size: " + count);
 
         mutex.release();
         full.release();
@@ -59,21 +54,17 @@ public class BoundedBuffer implements Buffer {
             full.acquire();
             mutex.acquire();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // remove an item from the buffer
         --count;
         Job item = buffer[out];
         out = (out + 1) % BUFFER_SIZE;
-
-        if (count == 0) {
-        } else {
-
-        }
+        System.out.println("Removed job from buffer... current buffer size: " + count);
 
         mutex.release();
         empty.release();
-
         return item;
     }
 }
