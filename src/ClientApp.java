@@ -1,16 +1,16 @@
 /**
- * Producer.java
+ * ClientApp.java
  *
- * This class runs as a thread that creates job objects and adds them into the BoundedBuffer.
+ * This class runs as a thread that creates job threads and adds them into the BoundedBuffer.
  * */
-public class Producer implements Runnable {
+public class ClientApp implements Runnable {
 
     public String appType;
     private Buffer buffer;
-    public int interArrivalTime;
+    public double interArrivalTime;
     public double serviceTime;
 
-    public Producer(Buffer b, String appType, int interArrivalTime, double serviceTime) {
+    public ClientApp(Buffer b, String appType, double interArrivalTime, double serviceTime) {
         this.appType = appType;
         this.buffer = b;
         this.interArrivalTime = interArrivalTime;
@@ -23,8 +23,8 @@ public class Producer implements Runnable {
      * */
     public void run() {
         while (true) {
-            SleepUtilities.nap(interArrivalTime);
-            buffer.insert(new Job());
+            SleepUtilities.nap((int)this.interArrivalTime);
+            buffer.insert(new Thread (new Job(this.appType)));
         }
     }
 }

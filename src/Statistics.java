@@ -7,9 +7,10 @@
  * */
 public class Statistics {
     public static int stat_totalNrJobs = 0; // total number of jobs produced and consumed
+
     public static double stat_totalBusyTime; // total time jobs spent running
-    public static double stat_totalTurnTime; // total turnaround time among jobs (service time + wait time)
-    public static double stat_totalWaitTime; // total wait time among jobs (creation time - start time)
+    public static double stat_totalTurnTime; // total turnaround time among jobs
+    public static double stat_totalWaitTime; // total wait time among jobs
 
     public static double max_service_time; // highest time job spent running
     public static double max_turnaround_time; // highest time job spent in turnaround
@@ -24,17 +25,11 @@ public class Statistics {
     /**
      * updateStats method.
      *
-     * This method updates the job-specific and global statistics of the program.
+     * This method updates the global statistics of the program.
      * It is called every time a job is completed/consumed.
      * */
-    public static void updateStats(Job job, double end, double start) {
-        stat_totalNrJobs++; // update # of jobs ran
-
-        // update job-specific data members
-        job.completionTime = System.currentTimeMillis();
-        job.serviceTime = (end - start);
-        job.waitTime = (start - job.creationTime);
-        job.turnaroundTime = (job.serviceTime + job.waitTime);
+    public static void updateStats(Job job) {
+        ++stat_totalNrJobs; // update # of jobs ran
 
         // update totals
         Statistics.stat_totalBusyTime += job.serviceTime;
@@ -65,13 +60,14 @@ public class Statistics {
     }
 
     /**
-     * printStats method.
+     * printStatsAndExit method.
      *
      * This method prints the current global statistics at the end of runtime.
+     * Then ends the program.
      * It is only called at the end of runtime.
      * */
-    public static void printStats() {
-        System.out.println("Total number of jobs ran: " + stat_totalNrJobs);
+    public synchronized static void printStatsAndExit() {
+        System.out.println("\n\n" + stat_totalNrJobs + " Jobs were completed. Printing statistics and ending program...\n");
 
         System.out.println("Average service time: " + String.format("%.2f", avg_service_time)  + " ms");
         System.out.println("Average turnaround time: " + String.format("%.2f",avg_turnaround_time) + " ms");
@@ -82,17 +78,7 @@ public class Statistics {
         System.out.println("Maximum wait time: " + max_wait_time + " ms");
 
         System.out.println("CPU utilization was: " + String.format("%.2f",CPU_utilization) + "%");
-    }
 
-    /**
-     * end method.
-     *
-     * Used to end execution.
-     * It is called from the consumer thread once 30 jobs have been completed.
-     * */
-    public static void end() {
-        System.out.println("\n\n" +stat_totalNrJobs + " Jobs were completed. Printing statistics and ending program...\n");
-        printStats();
         System.exit(0);
     }
 }

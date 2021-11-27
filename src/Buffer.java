@@ -13,7 +13,7 @@ public interface Buffer
 	 * Note this may be either a blocking
 	 * or non-blocking operation.
 	 */
-	public abstract void insert(Job item);
+	public abstract void insert(Object item);
 
 	/**
 	 * remove an item from the Buffer.
@@ -21,5 +21,5 @@ public interface Buffer
 	 * or non-blocking operation.
      * @return
      */
-	public abstract Job remove();
+	public abstract Object remove();
 }

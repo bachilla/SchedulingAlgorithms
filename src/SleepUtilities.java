@@ -6,20 +6,19 @@
  */
 public class SleepUtilities {
 
-	private static final int NAP_TIME = 5;
-
 	/**
-	 * Nap between zero and duration seconds.
+	 * Nap for specific amount of time
 	 */
 	public static void nap(int duration) {
         	try {Thread.sleep(duration);}
-        	catch (InterruptedException e) {e.printStackTrace();}
+        	catch (InterruptedException e) {}
 	}
 
 	/**
-	 * Nap between zero and NAP_TIME seconds.
-	 */
-	public static void nap() {
-		nap(NAP_TIME);
+	 * Nap for a randomized amount of time.
+	 * */
+	public static void napRandom(int sleepTime) {
+		try {Thread.sleep((long) (sleepTime * -Math.log(Math.random()))); }
+		catch (InterruptedException e) {}
 	}
 }
