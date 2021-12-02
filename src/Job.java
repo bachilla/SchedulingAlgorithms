@@ -1,3 +1,5 @@
+import java.util.concurrent.Semaphore;
+
 /**
  * Job class.
  * <p>
@@ -16,36 +18,31 @@ public class Job implements Runnable {
     public double waitTime;
     public int schedulerID = 0;
 
-    public Job(String appType) {
+    public Job(String appType, double serviceTime) {
         this.creationTime = System.currentTimeMillis();
         ++this.schedulerID;
         this.appType = appType;
-        if (this.appType.equals("IO")) {
-            this.serviceTime = 4;
-        }
-        else {
-            this.serviceTime = 90;
-        }
+        this.serviceTime = serviceTime;
     }
 
     /**
      * run method.
      *
-     * While job thread runs, it naps for a specified or random amount of time.
-     * Its data members and gloabl stats are updated at the end of its run.
-     * The update happens outside of recorded time as to not skew results.
+     * While job runs, it naps for a specified or random amount of time.
+     * Its data members and global stats are updated at the end of its run.
+     * The update happens outside recorded time as to not skew results.
      * */
     public void run() {
-        this.startTime = System.currentTimeMillis();
-        SleepUtilities.nap((int) this.serviceTime);
-        this.completionTime = System.currentTimeMillis();
+            this.startTime = System.currentTimeMillis();
+            SleepUtilities.napRandom((int) this.serviceTime);
+            this.completionTime = System.currentTimeMillis();
 
-        // update job-specific data members
-        this.serviceTime = (this.completionTime - this.startTime);
-        this.waitTime = (this.startTime - this.creationTime);
-        this.turnaroundTime = (this.serviceTime + this.waitTime);
+            // update job-specific data members
+            this.serviceTime = (this.completionTime - this.startTime);
+            this.waitTime = (this.startTime - this.creationTime);
+            this.turnaroundTime = (this.serviceTime + this.waitTime);
 
-        // update global stats
-        Statistics.updateStats(this);
+            // update global stats
+            Statistics.updateStats(this);
     }
 }

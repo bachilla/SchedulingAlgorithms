@@ -35,7 +35,6 @@ public class BoundedBuffer implements Buffer {
             empty.acquire();
             mutex.acquire();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         // add an item to the buffer
@@ -54,7 +53,6 @@ public class BoundedBuffer implements Buffer {
             full.acquire();
             mutex.acquire();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         // remove an item from the buffer

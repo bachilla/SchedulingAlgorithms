@@ -7,6 +7,7 @@
  * */
 public class Statistics {
     public static int stat_totalNrJobs = 0; // total number of jobs produced and consumed
+    public static int stat_numThreads = 1; // number of consumer threads
 
     public static double stat_totalBusyTime; // total time jobs spent running
     public static double stat_totalTurnTime; // total turnaround time among jobs
@@ -20,7 +21,8 @@ public class Statistics {
     public static double avg_turnaround_time; // average time jobs spent in turnaround
     public static double avg_wait_time; // average time jobs spent waiting
 
-    public static double CPU_utilization; // how much CPU was utilized throughout the runtime
+    public static double CPU_utilization = 0; // how much CPU was utilized throughout the runtime
+    public static double CPU_throughput = 0;
 
     /**
      * updateStats method.
@@ -28,13 +30,13 @@ public class Statistics {
      * This method updates the global statistics of the program.
      * It is called every time a job is completed/consumed.
      * */
-    public static void updateStats(Job job) {
+    public synchronized static void updateStats(Job job) {
         ++stat_totalNrJobs; // update # of jobs ran
+            // update totals
+        stat_totalBusyTime += job.serviceTime;
+        stat_totalTurnTime += job.turnaroundTime;
+        stat_totalWaitTime += job.waitTime;
 
-        // update totals
-        Statistics.stat_totalBusyTime += job.serviceTime;
-        Statistics.stat_totalTurnTime += job.turnaroundTime;
-        Statistics.stat_totalWaitTime += job.waitTime;
 
         // update max values
         if (job.serviceTime > max_service_time) {
@@ -56,7 +58,17 @@ public class Statistics {
         Factory.end_time = System.currentTimeMillis();
 
         // update CPU utilization
-        CPU_utilization = (stat_totalBusyTime / (Factory.end_time - Factory.start_time) * 100);
+        // if CPU utilization is over 100%, it is because jobs are being made faster than they can run
+        // we can solve this by dividing by the total service time by the number of consumers + 1
+        if (CPU_utilization < 100) {
+            CPU_utilization = (((stat_totalBusyTime) / (Factory.end_time - Factory.start_time)) * 100);
+        }
+        else {
+            CPU_utilization = (((stat_totalBusyTime / stat_numThreads) / (Factory.end_time - Factory.start_time)) * 100);
+        }
+
+        // update throughput
+        CPU_throughput = stat_totalNrJobs / (Factory.end_time - Factory.start_time);
     }
 
     /**
@@ -78,6 +90,7 @@ public class Statistics {
         System.out.println("Maximum wait time: " + max_wait_time + " ms");
 
         System.out.println("CPU utilization was: " + String.format("%.2f",CPU_utilization) + "%");
+        System.out.println("CPU throughput was: " + String.format("%.2f",(CPU_throughput * 1000)) + " jobs/sec");
 
         System.exit(0);
     }
