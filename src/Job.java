@@ -34,7 +34,7 @@ public class Job implements Runnable {
      * */
     public void run() {
             this.startTime = System.currentTimeMillis();
-            SleepUtilities.napRandom((int) this.serviceTime);
+            SleepUtilities.nap((int) this.serviceTime);
             this.completionTime = System.currentTimeMillis();
 
             // update job-specific data members
