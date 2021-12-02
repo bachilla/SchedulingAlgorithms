@@ -22,9 +22,7 @@ public class RoundRobin extends ScheduleServer implements Runnable  {
      *
      * while this thread runs, removes jobs from the buffer.
      * and processes them in RoundRobin fashion for 10 ms each before rotating jobs.
-     * Job's statistics and other stats are then updated.
-     *
-     * Ends once # of jobs have been ran.
+     * Job's statistics and other stats are then updated..
      * */
     @Override
     public void run()  {

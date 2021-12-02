@@ -44,11 +44,11 @@ public class Factory {
 
         // get the start time and sleep while the other threads run. Then print statistics and exit.
         Factory.start_time = System.currentTimeMillis();
-        Thread.sleep(10000);
+        Thread.sleep(25000);
         Statistics.printStatsAndExit();
     }
 }
 // 1) 1 Server Processor: CPU bound inter-arrival=100, service=55, I/O Bound inter-arrival time=10, service=4
 // 2) 2 Server Processors: CPU bound inter-arrival=100, service=55, I/O Bound inter-arrival time=10, service=4
 // 3) 2 Server Processors: CPU bound inter-arrival=50, service=55, I/O Bound inter-arrival time=2, service=4
-// 4) 4 Server Processors:  CPU bound inter-arrival=50, service=55, I/O Bound inter-arrival time=2, service=4;
+// 4) 4 Server Processors:  CPU bound inter-arrival=50, service=55, I/O Bound inter-arrival time=2, service=4

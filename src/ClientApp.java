@@ -28,8 +28,8 @@ public class ClientApp implements Runnable {
      */
     public void run() {
         while (true) {
-            SleepUtilities.napRandom((int) this.interArrivalTime);
             buffer.insert(new Thread(new Job(this.appType, this.serviceTime)));
+            SleepUtilities.napRandom((int) this.interArrivalTime);
         }
     }
 }
